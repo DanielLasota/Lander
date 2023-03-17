@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Text.hpp>
+#include <sstream>
 
 using namespace std;
 using namespace sf;
@@ -22,19 +23,6 @@ int main()
 
     // tworzenie okna graficznego
     RenderWindow window(VideoMode(width, height), "Funkcja kwadratowa");
-
-    // tworzenie obiektu klasy Text
-    sf::Font font;
-    if (!font.loadFromFile("C:\\Users\\Devxd\\Desktop\\EurostileExtended.ttf")) {
-        cout << "Unable to read .ttf file... ";
-        // obs³uga b³êdu - czcionka nie zosta³a wczytana
-        // mo¿na wyœwietliæ informacjê o b³êdzie lub przerwaæ program
-    }
-    
-    sf::Text zeros; // ustawienie czcionki dla tekstu
-    zeros.setFont(font);
-    zeros.setCharacterSize(20); // ustawienie rozmiaru tekstu domyœlnej czcionki
-    zeros.setFillColor(sf::Color::Black); // ustawienie koloru tekstu
 
     // delta, zero and others
     delta = b * b - 4 * a * c;
@@ -55,7 +43,19 @@ int main()
     axes[2].color = Color::Black;
     axes[3].color = Color::Black;
 
-    
+    // grid
+    VertexArray grid(Lines, (width / 2 + height / 2) * 2);
+    int index = 0;
+    for (int i = -width / 2; i <= width / 2; i++) {
+        if (i != 0) {
+            grid[index].position = Vector2f(static_cast<float>(width / 2 + i), 0.0f);
+            grid[index + 1].position = Vector2f(static_cast<float>(width / 2 + i), static_cast<float>(height));
+            grid[index].color = Color(200, 200, 200, 100);
+            grid[index + 1].color = Color(200, 200, 200, 100);
+            index += 2;
+        }
+    }
+
     // function graph
     VertexArray plot(LineStrip, n);
     for (int i = 0; i < n; i++)
@@ -72,22 +72,61 @@ int main()
     View view(FloatRect(0, 0, width, height));
     window.setView(view);
 
-    std::ostringstream oss;
-    oss << "Miejsca zerowe: x1 = " << x1 << ", x2 = " << x2;
-    std::string text = oss.str();
-    zeros.setString(text);
+    // tworzenie obiektu klasy Text
+    sf::Font font;
+    if (!font.loadFromFile("C:\\Users\\Devxd\\Desktop\\EurostileExtended.ttf")) {
+        cout << "Unable to read .ttf file... ";
+        // obs³uga b³êdu - czcionka nie zosta³a wczytana
+        // mo¿na wyœwietliæ informacjê o b³êdzie lub przerwaæ program
+    }
 
-    // loop for displ
+    sf::Text zeros; // ustawienie czcionki dla tekstu
+    zeros.setFont(font);
+    zeros.setCharacterSize(20); // ustawienie rozmiaru tekstu domyœlnej czcionki
+    zeros.setFillColor(sf::Color::Black); // ustawienie koloru tekstu
+
+    // ustawienie treœci tekstu na podstawie miejsc zerowych funkcji
+    std::stringstream oss;
+    oss << "Pierwsze miejsce: " << x1 << ", drugie miejsce: " << x2;
+    zeros.setString(oss.str());
+
+    // wyœwietlenie tekstu w oknie graficznym
+    zeros.setPosition(-500, 0); // ustawienie pozycji tekstu
+    //window.draw(zeros); // narysowanie tekstu na ekranie
+
+    Vector2f previousMousePos; // zmienna przechowuj¹ca poprzednie po³o¿enie kursora myszy
+    bool isDragging = false;
+    sf::Vector2i lastPosition;
+
     while (window.isOpen())
     {
-        Event event;
+        sf::Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == Event::Closed)
+            // obs³uga zamkniêcia okna
+            if (event.type == sf::Event::Closed)
                 window.close();
-            else if (event.type == Event::MouseWheelScrolled)
+            // obs³uga przesuwania wykresu myszk¹
+            else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
             {
-                if (event.mouseWheelScroll.wheel == Mouse::VerticalWheel)
+                // zapisanie pozycji kursora w momencie naciœniêcia przycisku myszy
+                lastPosition = sf::Mouse::getPosition(window);
+            }
+            else if (event.type == sf::Event::MouseMoved && sf::Mouse::isButtonPressed(sf::Mouse::Left))
+            {
+                // wyznaczenie ró¿nicy pomiêdzy aktualn¹ pozycj¹ kursora a pozycj¹ pocz¹tkow¹
+                sf::Vector2i delta = sf::Mouse::getPosition(window) - lastPosition;
+
+                // przesuniêcie wykresu o odpowiedni¹ wartoœæ
+                view.move(-delta.x, -delta.y);
+                window.setView(view);
+
+                // zapisanie aktualnej pozycji kursora jako pozycji pocz¹tkowej
+                lastPosition = sf::Mouse::getPosition(window);
+            }
+            if (event.type == sf::Event::MouseWheelScrolled)
+            {
+                if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel)
                 {
                     view.zoom(1 - event.mouseWheelScroll.delta / 10.0f);
                     window.setView(view);
@@ -95,15 +134,16 @@ int main()
             }
         }
 
+
+
+
+
         window.clear(Color::White); // czyszczenie ekranu
         window.draw(axes);  // rysowanie osi uk³adu wspó³rzêdnych
-        window.draw(plot);  // rysowanie wykresu funkcji kwadratowe    
+        window.draw(plot);  // rysowanie wykresu funkcji kwadratowe   
+        window.draw(zeros);
         window.display(); // wyœwietlanie okna graficznego
     }
-
-
-
-
 
     return 0;
 }
