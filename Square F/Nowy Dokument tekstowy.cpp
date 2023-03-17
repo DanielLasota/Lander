@@ -1,73 +1,57 @@
-// axes
-VertexArray axes(Lines, 4);
-axes[0].position = Vector2f(static_cast<float>(width / 2), 0.0f);
-axes[1].position = Vector2f(static_cast<float>(width / 2), static_cast<float>(height));
-axes[2].position = Vector2f(0.0f, static_cast<float>(height / 2));
-axes[3].position = Vector2f(static_cast<float>(width), static_cast<float>(height / 2));
-axes[0].color = Color::Black;
-axes[1].color = Color::Black;
-axes[2].color = Color::Black;
-axes[3].color = Color::Black;
-
-// grid
-VertexArray grid(Lines, (width + height) * 2);
-int index = 0;
-for (int i = -width / 2; i <= width / 2; i++) {
-    if (i != 0) {
-        grid[index].position = Vector2f(static_cast<float>(width / 2 + i), 0.0f);
-        grid[index + 1].position = Vector2f(static_cast<float>(width / 2 + i), static_cast<float>(height));
-        grid[index].color = Color(200, 200, 200, 100);
-        grid[index + 1].color = Color(200, 200, 200, 100);
-        index += 2;
-    }
-}
-
-for (int i = -height / 2; i <= height / 2; i++) {
-    if (i != 0) {
-        grid[index].position = Vector2f(0.0f, static_cast<float>(height / 2 + i));
-        grid[index + 1].position = Vector2f(static_cast<float>(width), static_cast<float>(height / 2 + i));
-        grid[index].color = Color(200, 200, 200, 100);
-        grid[index + 1].color = Color(200, 200, 200, 100);
-        index += 2;
-    }
-}
-
-// additional grid for 1x1 spacing
-VertexArray grid1x1(Lines, (width + height) * 2);
-index = 0;
-for (int i = -width / 2; i <= width / 2; i++) {
-    if (i % 10 == 0) {
-        grid1x1[index].position = Vector2f(static_cast<float>(width / 2 + i), static_cast<float>(height / 2) - 0.5f);
-        grid1x1[index + 1].position = Vector2f(static_cast<float>(width / 2 + i), static_cast<float>(height / 2) + 0.5f);
-        grid1x1[index].color = Color(0, 0, 0, 100);
-        grid1x1[index + 1].color = Color(0, 0, 0, 100);
-index += 2;
-}
-}
-
-for (int i = -height / 2; i <= height / 2; i++) {
-	if (i % 10 == 0) {
-		grid1x1[index].position = Vector2f(static_cast<float>(width / 2) - 0.5f, static_cast<float>(height / 2 + i));
-		grid1x1[index + 1].position = Vector2f(static_cast<float>(width / 2) + 0.5f, static_cast<float>(height / 2 + i));
-		grid1x1[index].color = Color(0, 0, 0, 100);
-		grid1x1[index + 1].color = Color(0, 0, 0, 100);
-		index += 2;
-	}
-}
-
-// function graph
-VertexArray plot(LineStrip, n);
-for (int i = 0; i < n; i++)
+while (window.isOpen())
 {
-	//x = static_cast<float>(i - n / 2) / n * 20.0f;
-	x = static_cast<float>(i - n / 2) / static_cast<float>(n) * 20.0f;
-	y = a * x * x + b * x + c;
-	plot[i].position = Vector2f((x - p) * static_cast<float>(width) / 20.0f + static_cast<float>(width / 2), -(y - q) * static_cast<float>(height) / 20.0f + static_cast<float>(height / 2));
-	plot[i].color = Color::Red;
+    sf::Event event;
+    while (window.pollEvent(event))
+    {
+        // obs³uga zamkniêcia okna
+        if (event.type == sf::Event::Closed)
+            window.close();
+        // obs³uga przesuwania wykresu myszk¹
+        else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+        {
+            // zapisanie pozycji kursora w momencie naciœniêcia przycisku myszy
+            lastPosition = sf::Mouse::getPosition(window);
+        }
+        else if (event.type == sf::Event::MouseMoved && sf::Mouse::isButtonPressed(sf::Mouse::Left))
+        {
+            // wyznaczenie ró¿nicy pomiêdzy aktualn¹ pozycj¹ kursora a pozycj¹ pocz¹tkow¹
+            sf::Vector2i delta = sf::Mouse::getPosition(window) - lastPosition;
+
+            // regulacja prêdkoœci przesuwania w zale¿noœci od wartoœci skali
+            float zoomLevel = view.getSize().x / window.getSize().x;
+            float speed = 1.0f;
+            if (zoomLevel > 1.0f) {
+                speed = 1.0f / zoomLevel;
+            }
+            // przesuniêcie wykresu o odpowiedni¹ wartoœæ z uwzglêdnieniem prêdkoœci
+            view.move(-delta.x * speed, -delta.y * speed);
+            window.setView(view);
+
+            // zapisanie aktualnej pozycji kursora jako pozycji pocz¹tkowej
+            lastPosition = sf::Mouse::getPosition(window);
+        }
+        if (event.type == sf::Event::MouseWheelScrolled)
+        {
+            if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel)
+            {
+                // regulacja prêdkoœci przybli¿ania w zale¿noœci od wartoœci skali
+                float zoomLevel = view.getSize().x / window.getSize().x;
+                float speed = 0.1f;
+                if (zoomLevel > 1.0f) {
+                    speed = 0.1f / zoomlevel;
+            }
+            // przybli¿anie z uwzglêdnieniem prêdkoœci
+            view.zoom(1 - event.mouseWheelScroll.delta * speed);
+            window.setView(view);
+        }
+    }
 }
 
-// draw everything
-window.draw(grid);
+window.clear(Color::White); // czyszczenie ekranu
+//window.draw(grid);
 window.draw(grid1x1);
-window.draw(axes);
-window.draw(plot);
+window.draw(axes);  // rysowanie osi uk³adu wspó³rzêdnych
+window.draw(plot);  // rysowanie wykresu funkcji kwadratowe   
+window.draw(zeros);
+window.display(); // wyœwietlanie okna graficznego
+}
