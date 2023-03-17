@@ -181,3 +181,70 @@ while (window.isOpen())
     window.display(); // wyœwietlanie okna graficznego
 
 }
+
+
+
+int main()
+{
+    double a, b, c, y, x, delta;
+    const int width = 800; // szerokoœæ okna graficznego
+    const int height = 600; // wysokoœæ okna graficznego
+    const int n = 200; // liczba punktów na wykresie
+    const float thickness = 2.0f; // gruboœæ linii wykresu
+
+    // pobieranie wartoœci wspó³czynników a, b i c
+    cout << "Podaj wspolczynniki a, b i c dla funkcji kwadratowej: ";
+    cin >> a >> b >> c;
+
+    // tworzenie okna graficznego
+    RenderWindow window(VideoMode(width, height), "Funkcja kwadratowa");
+
+    // delta, zero and others
+    delta = b * b - 4 * a * c;
+    double x1 = (-b - sqrt(delta)) / (2 * a);
+    double x2 = (-b + sqrt(delta)) / (2 * a);
+    double v1 = -b / a;
+    double v2 = c / a;
+    double p = -b / (2.0 * a);
+    double q = a * p * p + b * p + c;
+    double r = a * (p + 1.0 / (4.0 * a)) * (p + 1.0 / (4.0 * a)) + q - 1.0 / (4.0 * a);
+
+    delta = (delta == -0.0) ? 0.0
+// Function formulas
+std::string general_form = "f(x) = ";
+if (a != 0) {
+    general_form += std::to_string(a) + "x^2";
+}
+if (b != 0) {
+    if (a != 0) {
+        general_form += " + ";
+    }
+    general_form += std::to_string(b) + "x";
+}
+if (c != 0) {
+    if (a != 0 || b != 0) {
+        general_form += " + ";
+    }
+    general_form += std::to_string(c);
+}
+std::string product_form = "f(x) = ";
+if (a != 0) {
+    product_form += std::to_string(a) + "(x - " + std::to_string(x1) + ")(x - " + std::to_string(x2) + ")";
+}
+else {
+    product_form += "0";
+}
+
+std::string vertex_form = "f(x) = ";
+if (a != 0) {
+    vertex_form += std::to_string(a) + "(x - " + std::to_string(p) + ")^2 + " + std::to_string(q);
+}
+else {
+    vertex_form += std::to_string(q);
+}
+
+std::cout << "General form: " << general_form << std::endl;
+std::cout << "Product form: " << product_form << std::endl;
+std::cout << "Vertex form: " << vertex_form << std::endl;
+
+//...

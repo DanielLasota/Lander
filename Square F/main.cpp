@@ -5,7 +5,6 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <sstream>
-#include <iomanip>
 
 using namespace std;
 using namespace sf;
@@ -17,14 +16,13 @@ int main()
     const int height = 600; // wysokoœæ okna graficznego
     const int n = 200; // liczba punktów na wykresie
     const float thickness = 2.0f; // gruboœæ linii wykresu
-    std::string general_form, product_form, canonical_form;
 
     // pobieranie wartoœci wspó³czynników a, b i c
     cout << "Podaj wspolczynniki a, b i c dla funkcji kwadratowej: ";
     cin >> a >> b >> c;
 
     // tworzenie okna graficznego
-    RenderWindow window(VideoMode(width, height), "Funkcja kwadratowa");
+    RenderWindow window(VideoMode(width, height), "Funkcja kwadratowa", sf::Style::None);
 
     // delta, zero and others
     delta = b * b - 4 * a * c;
@@ -45,20 +43,59 @@ int main()
     v1 = (q == -0.0) ? 0.0 : v1;
     v2 = (r == -0.0) ? 0.0 : v2;
 
-    if (a == 1.0) {
-        general_form = "x^2";
+    // Function formulas
+    std::string general_form = "f(x) = ";
+    if (a != 0) {
+        general_form += std::to_string(a) + "x^2";
+    }
+    if (b != 0) {
+        if (a != 0) {
+            general_form += " + ";
+        }
+        general_form += std::to_string(b) + "x";
+    }
+    if (c != 0) {
+        if (a != 0 || b != 0) {
+            general_form += " + ";
+        }
+        general_form += std::to_string(c);
+    }
+    std::string product_form = "f(x) = ";
+    if (a != 0) {
+        product_form += std::to_string(a) + "(x - " + std::to_string(x1) + ")(x - " + std::to_string(x2) + ")";
     }
     else {
-        general_form = std::to_string(a) + "x^2";
+        product_form += "0";
     }
 
-    product_form = std::to_string(a) + "(x - " + std::to_string(x1) + ")(x - " + std::to_string(x2) + ")";
-    canonical_form = std::to_string(a) + "(x + " + std::to_string(p) + ")^2 + " + std::to_string(r);
+    std::string vertex_form = "f(x) = ";
+    if (a != 0) {
+        vertex_form += std::to_string(a) + "(x - " + std::to_string(p) + ")^2 + " + std::to_string(q);
+    }
+    else {
+        vertex_form += std::to_string(q);
+    }
 
-    std::cout << std::fixed << std::setprecision(6);
-    std::cout << "General form: " << general_form << " + " << std::to_string(b) << "x + " << std::to_string(c) << std::endl;
+    std::cout << "General form: " << general_form << std::endl;
     std::cout << "Product form: " << product_form << std::endl;
-    std::cout << "Canonical form: " << canonical_form << std::endl;
+    std::cout << "Vertex form: " << vertex_form << std::endl;
+
+
+    //// Function formulas
+    //std::string general_form = "f(x) = " + std::to_string(a) + "x^2 + " + std::to_string(b) + "x + " + std::to_string(c);
+    //std::string product_form = "f(x) = " + std::to_string(a) + "(x - " + std::to_string(x1) + ")(x - " + std::to_string(x2) + ")";
+    //std::string vertex_form = "f(x) = " + std::to_string(a) + "(x - " + std::to_string(p) + ")^2 + " + std::to_string(q);
+
+    //std::cout << "General form: " << general_form << std::endl;
+    //std::cout << "Product form: " << product_form << std::endl;
+    //std::cout << "Vertex form: " << vertex_form << std::endl;
+
+
+    //console chech-out
+    cout << "a=" << a << endl << "b=" << b << endl << "c=" << c << endl
+        << "p= " << p << endl << "q=" << q << endl << "r= " << r << endl
+        << "x1= " << x1 << endl << "x2=" << x2 << endl
+        << "v1=" << v1 << endl << "v2=" << v2;
         
 
     // axes
@@ -155,9 +192,12 @@ int main()
     else if (delta > 0)
         oss << "First zero: " << x1 << ", Second zero: " << x2 << endl;
     else
-        oss << "Function has no zeros..."
+        oss << "Function has no zeros...";
 
-        << "Delta: " << delta << endl;
+        oss << "Delta: " << delta << endl
+        << "General form: " << general_form << endl
+        << "Product form: " << product_form << endl
+        << "Vertex form: " << vertex_form << endl;
     zeros.setString(oss.str());
     zeros.setPosition(-500, 0);
     //window.draw(zeros); // narysowanie tekstu na ekranie
@@ -168,6 +208,8 @@ int main()
     Vector2f previousMousePos; // zmienna przechowuj¹ca poprzednie po³o¿enie kursora myszy
     bool isDragging = false;
     sf::Vector2i lastPosition;
+
+
     while (window.isOpen())
     {
         sf::Event event;
