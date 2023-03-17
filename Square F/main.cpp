@@ -5,6 +5,7 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <sstream>
+#include <iomanip>
 
 using namespace std;
 using namespace sf;
@@ -16,6 +17,7 @@ int main()
     const int height = 600; // wysokoœæ okna graficznego
     const int n = 200; // liczba punktów na wykresie
     const float thickness = 2.0f; // gruboœæ linii wykresu
+    std::string general_form, product_form, canonical_form;
 
     // pobieranie wartoœci wspó³czynników a, b i c
     cout << "Podaj wspolczynniki a, b i c dla funkcji kwadratowej: ";
@@ -28,11 +30,36 @@ int main()
     delta = b * b - 4 * a * c;
     double x1 = (-b - sqrt(delta)) / (2 * a);
     double x2 = (-b + sqrt(delta)) / (2 * a);
+    double v1 = -b / a;
+    double v2 = c / a;
     double p = -b / (2.0 * a);
     double q = a * p * p + b * p + c;
     double r = a * (p + 1.0 / (4.0 * a)) * (p + 1.0 / (4.0 * a)) + q - 1.0 / (4.0 * a);
 
-    cout << "a=" << a << endl << "b=" << b << endl << "c=" << c << endl;
+    delta = (delta == -0.0) ? 0.0 : delta;
+    x1 = (x1 == -0.0) ? 0.0 : x1;
+    x2 = (x2 == -0.0) ? 0.0 : x2;
+    p = (p == -0.0) ? 0.0 : p;
+    q = (q == -0.0) ? 0.0 : q;
+    r = (r == -0.0) ? 0.0 : r;
+    v1 = (q == -0.0) ? 0.0 : v1;
+    v2 = (r == -0.0) ? 0.0 : v2;
+
+    if (a == 1.0) {
+        general_form = "x^2";
+    }
+    else {
+        general_form = std::to_string(a) + "x^2";
+    }
+
+    product_form = std::to_string(a) + "(x - " + std::to_string(x1) + ")(x - " + std::to_string(x2) + ")";
+    canonical_form = std::to_string(a) + "(x + " + std::to_string(p) + ")^2 + " + std::to_string(r);
+
+    std::cout << std::fixed << std::setprecision(6);
+    std::cout << "General form: " << general_form << " + " << std::to_string(b) << "x + " << std::to_string(c) << std::endl;
+    std::cout << "Product form: " << product_form << std::endl;
+    std::cout << "Canonical form: " << canonical_form << std::endl;
+        
 
     // axes
     VertexArray axes(Lines, 4);
@@ -111,21 +138,32 @@ int main()
     View view(FloatRect(0, 0, width, height));
     window.setView(view);
 
+    //############################################VV
+    //################# text #####################VV
     sf::Font font;
     if (!font.loadFromFile("C:\\Users\\Devxd\\Desktop\\EurostileExtended.ttf")) {
         cout << "Unable to read .ttf file... ";
         // obs³uga b³êdu - czcionka nie zosta³a wczytana
     }
-
     sf::Text zeros;
     zeros.setFont(font);
     zeros.setCharacterSize(25);
     zeros.setFillColor(sf::Color::Black);
     std::stringstream oss;
-    oss << "First zero: " << x1 << ", Second zero: " << x2;
+    if (delta == 0)
+        oss << "Function' zero: " << p << endl;
+    else if (delta > 0)
+        oss << "First zero: " << x1 << ", Second zero: " << x2 << endl;
+    else
+        oss << "Function has no zeros..."
+
+        << "Delta: " << delta << endl;
     zeros.setString(oss.str());
     zeros.setPosition(-500, 0);
     //window.draw(zeros); // narysowanie tekstu na ekranie
+
+    //################# text #####################^^
+    //############################################^^
 
     Vector2f previousMousePos; // zmienna przechowuj¹ca poprzednie po³o¿enie kursora myszy
     bool isDragging = false;
@@ -177,65 +215,3 @@ int main()
 
     return 0;
 }
-
-
-
-
-
-
-//float moveScale = 0.1f; // skala przesuwania
-    //while (window.isOpen())
-    //{
-    //    sf::Event event;
-    //    while (window.pollEvent(event))
-    //    {
-    //        // obs³uga zamkniêcia okna
-    //        if (event.type == sf::Event::Closed)
-    //            window.close();
-    //        // obs³uga przesuwania wykresu myszk¹
-    //        else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
-    //        {
-    //            // zapisanie pozycji kursora w momencie naciœniêcia przycisku myszy
-    //            lastPosition = sf::Mouse::getPosition(window);
-    //        }
-    //        else if (event.type == sf::Event::MouseMoved && sf::Mouse::isButtonPressed(sf::Mouse::Left))
-    //        {
-    //            // wyznaczenie ró¿nicy pomiêdzy aktualn¹ pozycj¹ kursora a pozycj¹ pocz¹tkow¹
-    //            sf::Vector2f delta = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window) - lastPosition);
-    //            //sf::Vector2i delta = sf::Mouse::getPosition(window) - lastPosition;
-    //            // regulacja prêdkoœci przesuwania
-    //            delta = delta * moveScale;
-    //            // regulacja prêdkoœci przesuwania w zale¿noœci od wartoœci skali
-    //            float zoomLevel = view.getSize().x / window.getSize().x;
-    //            float speed = std::max(1.0f, 1.0f / zoomLevel);
-    //            
-    //            if (zoomLevel > 1.0f) {
-    //                speed = 1.0f / zoomLevel;
-    //            }
-    //            view.move(-delta.x * speed, -delta.y * speed);
-    //            window.setView(view);
-    //            lastPosition = sf::Mouse::getPosition(window);
-    //        }
-    //        if (event.type == sf::Event::MouseWheelScrolled)
-    //        {
-    //            if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel)
-    //            {
-    //                // zoom speed adjustment
-    //                //float zoomLevel = view.getSize().x / window.getSize().x;
-    //                float speed = 0.5f;
-    //                //if (zoomLevel > 1.0f) {
-    //                //    speed = 0.5f / zoomLevel;
-    //                //}
-    //                view.zoom(1 - event.mouseWheelScroll.delta * speed);
-    //                window.setView(view);
-    //            }
-    //        }
-    //    }
-
-    //    window.clear(Color::White);
-    //    window.draw(grid1x1);
-    //    window.draw(axes);
-    //    window.draw(plot);
-    //    window.draw(zeros);
-    //    window.display();
-    //}
