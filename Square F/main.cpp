@@ -90,12 +90,12 @@ int main()
     //################# GRID #####################^^
     //############################################^^ 
 
-    
-    //############################################VV
-    //################# F Gr #####################VV
-     
-    // function graph
 
+
+    
+
+    //############################################VV
+    //############### F Graph ####################VV
     VertexArray plot(LineStrip, n);
     for (int i = 0; i < n; i++)
     {
@@ -104,8 +104,7 @@ int main()
         plot[i].position = Vector2f(x * static_cast<float>(width) / 20.0f + static_cast<float>(width / 2), -y * static_cast<float>(height) / 20.0f + static_cast<float>(height / 2));
         plot[i].color = Color::Red;
     }
-
-    //################# F Gr #####################^^
+    //############### F Graph ####################^^
     //############################################^^
 
     // coursor initialize
@@ -123,7 +122,7 @@ int main()
     zeros.setCharacterSize(25);
     zeros.setFillColor(sf::Color::Black);
     std::stringstream oss;
-    oss << "Pierwsze miejsce: " << x1 << ", drugie miejsce: " << x2;
+    oss << "First zero: " << x1 << ", Second zero: " << x2;
     zeros.setString(oss.str());
     zeros.setPosition(-500, 0);
     //window.draw(zeros); // narysowanie tekstu na ekranie
@@ -131,7 +130,6 @@ int main()
     Vector2f previousMousePos; // zmienna przechowuj¹ca poprzednie po³o¿enie kursora myszy
     bool isDragging = false;
     sf::Vector2i lastPosition;
-
     while (window.isOpen())
     {
         sf::Event event;
@@ -150,41 +148,42 @@ int main()
             {
                 // wyznaczenie ró¿nicy pomiêdzy aktualn¹ pozycj¹ kursora a pozycj¹ pocz¹tkow¹
                 sf::Vector2i delta = sf::Mouse::getPosition(window) - lastPosition;
-                // regulacja prêdkoœci przesuwania w zale¿noœci od wartoœci skali
-                float zoomLevel = view.getSize().x / window.getSize().x;
-                float speed = 1.0f;
-                if (zoomLevel > 1.0f) {
-                    speed = 1.0f / zoomLevel;
-                }
-                view.move(-delta.x * speed, -delta.y * speed);
+
+                // przesuniêcie wykresu o odpowiedni¹ wartoœæ
+                view.move(-delta.x, -delta.y);
                 window.setView(view);
+
+                // zapisanie aktualnej pozycji kursora jako pozycji pocz¹tkowej
                 lastPosition = sf::Mouse::getPosition(window);
             }
             if (event.type == sf::Event::MouseWheelScrolled)
             {
                 if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel)
                 {
-                    // zoom speed adjustment
-                    float zoomLevel = view.getSize().x / window.getSize().x;
-                    float speed = 0.1f;
-                    if (zoomLevel > 1.0f) {
-                        speed = 0.1f / zoomLevel;
-                    }
-                    view.zoom(1 - event.mouseWheelScroll.delta * speed);
+                    view.zoom(1 - event.mouseWheelScroll.delta / 10.0f);
                     window.setView(view);
                 }
             }
         }
-
-        window.clear(Color::White);
+        window.clear(Color::White); // czyszczenie ekranu
+        //window.draw(grid);
         window.draw(grid1x1);
-        window.draw(axes);
-        window.draw(plot);
+        window.draw(axes);  // rysowanie osi uk³adu wspó³rzêdnych
+        window.draw(plot);  // rysowanie wykresu funkcji kwadratowe   
         window.draw(zeros);
-        window.display();
+        window.display(); // wyœwietlanie okna graficznego
+
     }
 
+    return 0;
+}
 
+
+
+
+
+
+//float moveScale = 0.1f; // skala przesuwania
     //while (window.isOpen())
     //{
     //    sf::Event event;
@@ -202,38 +201,41 @@ int main()
     //        else if (event.type == sf::Event::MouseMoved && sf::Mouse::isButtonPressed(sf::Mouse::Left))
     //        {
     //            // wyznaczenie ró¿nicy pomiêdzy aktualn¹ pozycj¹ kursora a pozycj¹ pocz¹tkow¹
-    //            sf::Vector2i delta = sf::Mouse::getPosition(window) - lastPosition;
-
-    //            // przesuniêcie wykresu o odpowiedni¹ wartoœæ
-    //            view.move(-delta.x, -delta.y);
+    //            sf::Vector2f delta = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window) - lastPosition);
+    //            //sf::Vector2i delta = sf::Mouse::getPosition(window) - lastPosition;
+    //            // regulacja prêdkoœci przesuwania
+    //            delta = delta * moveScale;
+    //            // regulacja prêdkoœci przesuwania w zale¿noœci od wartoœci skali
+    //            float zoomLevel = view.getSize().x / window.getSize().x;
+    //            float speed = std::max(1.0f, 1.0f / zoomLevel);
+    //            
+    //            if (zoomLevel > 1.0f) {
+    //                speed = 1.0f / zoomLevel;
+    //            }
+    //            view.move(-delta.x * speed, -delta.y * speed);
     //            window.setView(view);
-
-    //            // zapisanie aktualnej pozycji kursora jako pozycji pocz¹tkowej
     //            lastPosition = sf::Mouse::getPosition(window);
     //        }
     //        if (event.type == sf::Event::MouseWheelScrolled)
     //        {
     //            if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel)
     //            {
-    //                view.zoom(1 - event.mouseWheelScroll.delta / 10.0f);
+    //                // zoom speed adjustment
+    //                //float zoomLevel = view.getSize().x / window.getSize().x;
+    //                float speed = 0.5f;
+    //                //if (zoomLevel > 1.0f) {
+    //                //    speed = 0.5f / zoomLevel;
+    //                //}
+    //                view.zoom(1 - event.mouseWheelScroll.delta * speed);
     //                window.setView(view);
     //            }
     //        }
     //    }
 
-
-
-
-
-    //    window.clear(Color::White); // czyszczenie ekranu
-    //    //window.draw(grid);
+    //    window.clear(Color::White);
     //    window.draw(grid1x1);
-    //    window.draw(axes);  // rysowanie osi uk³adu wspó³rzêdnych
-    //    window.draw(plot);  // rysowanie wykresu funkcji kwadratowe   
+    //    window.draw(axes);
+    //    window.draw(plot);
     //    window.draw(zeros);
-    //    window.display(); // wyœwietlanie okna graficznego
-
+    //    window.display();
     //}
-
-    return 0;
-}
