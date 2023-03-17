@@ -43,8 +43,10 @@ int main()
     axes[2].color = Color::Black;
     axes[3].color = Color::Black;
 
+    //############################################
+
     // grid
-    VertexArray grid(Lines, (width / 2 + height / 2) * 2);
+    VertexArray grid(Lines, (width + height) * 2);
     int index = 0;
     for (int i = -width / 2; i <= width / 2; i++) {
         if (i != 0) {
@@ -55,6 +57,41 @@ int main()
             index += 2;
         }
     }
+
+    for (int i = -height / 2; i <= height / 2; i++) {
+        if (i != 0) {
+            grid[index].position = Vector2f(0.0f, static_cast<float>(height / 2 + i));
+            grid[index + 1].position = Vector2f(static_cast<float>(width), static_cast<float>(height / 2 + i));
+            grid[index].color = Color(200, 200, 200, 100);
+            grid[index + 1].color = Color(200, 200, 200, 100);
+            index += 2;
+        }
+    }
+
+    // additional grid for 1x1 spacing
+    VertexArray grid1x1(Lines, (width + height) * 2);
+    index = 0;
+    for (int i = -width / 2; i <= width / 2; i++) {
+        if (i % 10 == 0) {
+            grid1x1[index].position = Vector2f(static_cast<float>(width / 2 + i), static_cast<float>(height / 2) - 0.5f);
+            grid1x1[index + 1].position = Vector2f(static_cast<float>(width / 2 + i), static_cast<float>(height / 2) + 0.5f);
+            grid1x1[index].color = Color(0, 0, 0, 100);
+            grid1x1[index + 1].color = Color(0, 0, 0, 100);
+            index += 2;
+        }
+    }
+
+    for (int i = -height / 2; i <= height / 2; i++) {
+        if (i % 10 == 0) {
+            grid1x1[index].position = Vector2f(static_cast<float>(width / 2) - 0.5f, static_cast<float>(height / 2 + i));
+            grid1x1[index + 1].position = Vector2f(static_cast<float>(width / 2) + 0.5f, static_cast<float>(height / 2 + i));
+            grid1x1[index].color = Color(0, 0, 0, 100);
+            grid1x1[index + 1].color = Color(0, 0, 0, 100);
+            index += 2;
+        }
+    }
+
+    //############################################
 
     // function graph
     VertexArray plot(LineStrip, n);
@@ -139,10 +176,13 @@ int main()
 
 
         window.clear(Color::White); // czyszczenie ekranu
+        window.draw(grid);
+        window.draw(grid1x1);
         window.draw(axes);  // rysowanie osi uk³adu wspó³rzêdnych
         window.draw(plot);  // rysowanie wykresu funkcji kwadratowe   
         window.draw(zeros);
         window.display(); // wyœwietlanie okna graficznego
+
     }
 
     return 0;
