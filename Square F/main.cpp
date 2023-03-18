@@ -5,6 +5,7 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <sstream>
+#include <iomanip>
 
 using namespace std;
 using namespace sf;
@@ -12,19 +13,17 @@ using namespace sf;
 int main()
 {
     double a, b, c, y, x, delta;
-    const int width = 800; // szerokoœæ okna graficznego
-    const int height = 600; // wysokoœæ okna graficznego
-    const int n = 200; // liczba punktów na wykresie
-    const float thickness = 2.0f; // gruboœæ linii wykresu
+    const int width = 800;                      // szerokoœæ okna graficznego
+    const int height = 600;                     // wysokoœæ okna graficznego
+    const int n = 200;                          // liczba punktów na wykresie
+    const float thickness = 2.0f;
 
-    // pobieranie wartoœci wspó³czynników a, b i c
     cout << "Podaj wspolczynniki a, b i c dla funkcji kwadratowej: ";
     cin >> a >> b >> c;
 
-    // tworzenie okna graficznego
     RenderWindow window(VideoMode(width, height), "Funkcja kwadratowa", sf::Style::None);
 
-    // delta, zero and others
+    // delta, zeros etc 
     delta = b * b - 4 * a * c;
     double x1 = (-b - sqrt(delta)) / (2 * a);
     double x2 = (-b + sqrt(delta)) / (2 * a);
@@ -43,32 +42,68 @@ int main()
     v1 = (q == -0.0) ? 0.0 : v1;
     v2 = (r == -0.0) ? 0.0 : v2;
 
+
     // Function formulas
+
+    //general form
     std::string general_form = "f(x) = ";
     if (a != 0) {
-        general_form += std::to_string(a) + "x^2";
+        if(a==1)
+            general_form += "x^2";
+        else
+        general_form += to_string(a) + "x^2";
     }
     if (b != 0) {
         if (a != 0) {
             general_form += " + ";
         }
-        general_form += std::to_string(b) + "x";
+        if(b==1)
+            general_form += + "x";
+        else
+        general_form += to_string(b) + "x";
     }
     if (c != 0) {
         if (a != 0 || b != 0) {
             general_form += " + ";
         }
-        general_form += std::to_string(c);
-    }
-    std::string product_form = "f(x) = ";
-    if (a != 0) {
-        product_form += std::to_string(a) + "(x - " + std::to_string(x1) + ")(x - " + std::to_string(x2) + ")";
-    }
-    else {
-        product_form += "0";
+        general_form += to_string(c);
     }
 
-    std::string vertex_form = "f(x) = ";
+
+    //Product form
+    string product_form = "f(x) = ";
+
+    if (delta == 0){
+        if (a == 1){
+            if (p == 0)
+                product_form += "x^2";
+            else
+            product_form += "(x - " + to_string(p) + ")^2";
+        }
+        else{
+            if (p == 0)
+                product_form += to_string(a) + "x^2";
+            else
+            product_form += to_string(a) + "(x - " + to_string(p) + ")^2";
+        }
+            
+    }
+    else if (delta > 0) {
+        if (a == 1)
+            product_form += "(x - " + to_string(x1) + ")(x - " + to_string(x2) + ")";
+        else
+            product_form += to_string(a) + "(x - " + to_string(x1) + ")(x - " + to_string(x2) + ")";
+    }
+    else {
+        if (a == 1)
+            product_form += "(x - " + to_string(p) + ")^2";
+        else
+            product_form += to_string(a) + "(x - " + to_string(p) + ")^2";
+    }
+
+
+
+    string vertex_form = "f(x) = ";
     if (a != 0) {
         vertex_form += std::to_string(a) + "(x - " + std::to_string(p) + ")^2 + " + std::to_string(q);
     }
@@ -252,7 +287,6 @@ int main()
         window.draw(plot);  // rysowanie wykresu funkcji kwadratowe   
         window.draw(zeros);
         window.display(); // wyœwietlanie okna graficznego
-
     }
 
     return 0;
