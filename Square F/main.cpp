@@ -42,9 +42,7 @@ int main()
     v1 = (q == -0.0) ? 0.0 : v1;
     v2 = (r == -0.0) ? 0.0 : v2;
 
-
     // Function formulas
-
     //general form
     std::string general_form = "f(x) = ";
     if (a != 0) {
@@ -240,7 +238,7 @@ int main()
     //################# text #####################^^
     //############################################^^
 
-    Vector2f previousMousePos; // zmienna przechowuj¹ca poprzednie po³o¿enie kursora myszy
+    Vector2f previousMousePos;
     bool isDragging = false;
     sf::Vector2i lastPosition;
 
@@ -280,13 +278,13 @@ int main()
                 }
             }
         }
-        window.clear(Color::White); // czyszczenie ekranu
+        window.clear(Color::White);
         //window.draw(grid);
         window.draw(grid1x1);
-        window.draw(axes);  // rysowanie osi uk³adu wspó³rzêdnych
-        window.draw(plot);  // rysowanie wykresu funkcji kwadratowe   
+        window.draw(axes);
+        window.draw(plot);
         window.draw(zeros);
-        window.display(); // wyœwietlanie okna graficznego
+        window.display();
     }
 
     return 0;
