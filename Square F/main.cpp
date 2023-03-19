@@ -13,8 +13,8 @@ using namespace sf;
 int main()
 {
     double a, b, c, y, x, delta;
-    const int width = 800;                      // szerokoœæ okna graficznego
-    const int height = 600;                     // wysokoœæ okna graficznego
+    const int width = 800;                      // szeroko?? okna graficznego
+    const int height = 600;                     // wysoko?? okna graficznego
     const int n = 200;                          // liczba punktów na wykresie
     const float thickness = 2.0f;
 
@@ -32,6 +32,7 @@ int main()
     double p = -b / (2.0 * a);
     double q = a * p * p + b * p + c;
     double r = a * (p + 1.0 / (4.0 * a)) * (p + 1.0 / (4.0 * a)) + q - 1.0 / (4.0 * a);
+    double q_vertex = -(delta) / (4 * a);
 
     delta = (delta == -0.0) ? 0.0 : delta;
     x1 = (x1 == -0.0) ? 0.0 : x1;
@@ -39,52 +40,53 @@ int main()
     p = (p == -0.0) ? 0.0 : p;
     q = (q == -0.0) ? 0.0 : q;
     r = (r == -0.0) ? 0.0 : r;
-    v1 = (q == -0.0) ? 0.0 : v1;
-    v2 = (r == -0.0) ? 0.0 : v2;
+    v1 = (v1 == -0.0) ? 0.0 : v1;
+    v2 = (v2 == -0.0) ? 0.0 : v2;
+    q_vertex = (q_vertex == -0.0) ? 0.0 : q_vertex;
 
     // Function formulas
-    //general form
-    std::string general_form = "f(x) = ";
-    if (a != 0) {
-        if(a==1)
-            general_form += "x^2";
-        else
+
+    //general formVVVVV
+    //general formVVVVV
+    string general_form = "f(x) = ";
+    if (a == 1)//a
+        general_form += "x^2";
+    else
         general_form += to_string(a) + "x^2";
-    }
-    if (b != 0) {
-        if (a != 0) {
-            general_form += " + ";
-        }
-        if(b==1)
-            general_form += + "x";
-        else
-        general_form += to_string(b) + "x";
-    }
-    if (c != 0) {
-        if (a != 0 || b != 0) {
-            general_form += " + ";
-        }
-        general_form += to_string(c);
-    }
+    
+    if (b == 1)//b
+        general_form += " + x";
+    if (b == -1)
+        general_form += " - x";
+    if (b < 0 && b != -1)
+        general_form += " " + to_string(b) + "x";
+    if (b > 1 && b != 1)
+        general_form += " + " + to_string(b) + "x";
+    
+    if(c<0)//c
+        general_form += " " + to_string(c);
+    if (c > 0)
+        general_form += " + " + to_string(c);
 
+    //Product form VVVVVV
+    //Product form VVVVVV
 
-    //Product form
     string product_form = "f(x) = ";
 
-    if (delta == 0){
-        if (a == 1){
+    if (delta == 0) {
+        if (a == 1) {
             if (p == 0)
                 product_form += "x^2";
             else
-            product_form += "(x - " + to_string(p) + ")^2";
+                product_form += "(x - " + to_string(p) + ")^2";
         }
-        else{
+        else {
             if (p == 0)
                 product_form += to_string(a) + "x^2";
             else
-            product_form += to_string(a) + "(x - " + to_string(p) + ")^2";
+                product_form += to_string(a) + "(x - " + to_string(p) + ")^2";
         }
-            
+
     }
     else if (delta > 0) {
         if (a == 1)
@@ -99,38 +101,34 @@ int main()
             product_form += to_string(a) + "(x - " + to_string(p) + ")^2";
     }
 
-
+    //VERTEX FORM VVVVVVVV
+    //VERTEX FORM VVVVVVVV
 
     string vertex_form = "f(x) = ";
-    if (a != 0) {
-        vertex_form += std::to_string(a) + "(x - " + std::to_string(p) + ")^2 + " + std::to_string(q);
+    if (a == 1) { 
+        if (p != 0)
+            vertex_form += "(x - " + to_string(p) + ")^2";
+        else
+            vertex_form += "x^2";
     }
-    else {
-        vertex_form += std::to_string(q);
+    else if(a!=1) {
+        if(p != 0)
+            vertex_form += to_string(a) + "(x^2 - " + to_string(p) + ")";
+        else
+            vertex_form += to_string(a) + "x^2";
     }
+
+    if (q_vertex != 0)
+        vertex_form += " + " + to_string(q_vertex);
 
     std::cout << "General form: " << general_form << std::endl;
     std::cout << "Product form: " << product_form << std::endl;
     std::cout << "Vertex form: " << vertex_form << std::endl;
-
-
-    //// Function formulas
-    //std::string general_form = "f(x) = " + std::to_string(a) + "x^2 + " + std::to_string(b) + "x + " + std::to_string(c);
-    //std::string product_form = "f(x) = " + std::to_string(a) + "(x - " + std::to_string(x1) + ")(x - " + std::to_string(x2) + ")";
-    //std::string vertex_form = "f(x) = " + std::to_string(a) + "(x - " + std::to_string(p) + ")^2 + " + std::to_string(q);
-
-    //std::cout << "General form: " << general_form << std::endl;
-    //std::cout << "Product form: " << product_form << std::endl;
-    //std::cout << "Vertex form: " << vertex_form << std::endl;
-
-
     //console chech-out
     cout << "a=" << a << endl << "b=" << b << endl << "c=" << c << endl
         << "p= " << p << endl << "q=" << q << endl << "r= " << r << endl
         << "x1= " << x1 << endl << "x2=" << x2 << endl
         << "v1=" << v1 << endl << "v2=" << v2;
-        
-
     // axes
     VertexArray axes(Lines, 4);
     axes[0].position = Vector2f(static_cast<float>(width / 2), 0.0f);
@@ -189,7 +187,7 @@ int main()
 
 
 
-    
+
 
     //############################################VV
     //############### F Graph ####################VV
@@ -213,24 +211,32 @@ int main()
     sf::Font font;
     if (!font.loadFromFile("C:\\Users\\Devxd\\Desktop\\EurostileExtended.ttf")) {
         cout << "Unable to read .ttf file... ";
-        // obs³uga b³êdu - czcionka nie zosta³a wczytana
+        // error deal
     }
     sf::Text zeros;
     zeros.setFont(font);
     zeros.setCharacterSize(25);
     zeros.setFillColor(sf::Color::Black);
     std::stringstream oss;
-    if (delta == 0)
-        oss << "Function' zero: " << p << endl;
-    else if (delta > 0)
-        oss << "First zero: " << x1 << ", Second zero: " << x2 << endl;
-    else
-        oss << "Function has no zeros...";
 
-        oss << "Delta: " << delta << endl
-        << "General form: " << general_form << endl
+    oss << "General form: " << general_form << endl
         << "Product form: " << product_form << endl
-        << "Vertex form: " << vertex_form << endl;
+        << "Vertex form: " << vertex_form << endl << endl
+        << "Delta: " << delta << endl;
+    if (delta == 0)
+        oss << "Function' zero: " << p << endl << endl;
+    else if (delta > 0)
+        oss << "First zero: " << x1 << ", Second zero: " << x2 << endl << endl;
+    else
+        oss << "Function has no zeros..." << endl << endl;
+
+    oss << "Vieta's formulas: " << endl << "x1 + x2 = " << v1 << endl << "x1 * x2 = " << v2 << endl << endl
+        << "Vertex coordinates V(p,q) = (" << p << "," << q_vertex << ")"
+        << endl << endl;
+
+
+ 
+        
     zeros.setString(oss.str());
     zeros.setPosition(-500, 0);
     //window.draw(zeros); // narysowanie tekstu na ekranie
@@ -248,25 +254,25 @@ int main()
         sf::Event event;
         while (window.pollEvent(event))
         {
-            // obs³uga zamkniêcia okna
+            // obs?uga zamkni?cia okna
             if (event.type == sf::Event::Closed)
                 window.close();
-            // obs³uga przesuwania wykresu myszk¹
+            // obs?uga przesuwania wykresu myszk?
             else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
             {
-                // zapisanie pozycji kursora w momencie naciœniêcia przycisku myszy
+                // zapisanie pozycji kursora w momencie naci?ni?cia przycisku myszy
                 lastPosition = sf::Mouse::getPosition(window);
             }
             else if (event.type == sf::Event::MouseMoved && sf::Mouse::isButtonPressed(sf::Mouse::Left))
             {
-                // wyznaczenie ró¿nicy pomiêdzy aktualn¹ pozycj¹ kursora a pozycj¹ pocz¹tkow¹
+                // wyznaczenie ró?nicy pomi?dzy aktualn? pozycj? kursora a pozycj? pocz?tkow?
                 sf::Vector2i delta = sf::Mouse::getPosition(window) - lastPosition;
 
-                // przesuniêcie wykresu o odpowiedni¹ wartoœæ
+                // przesuni?cie wykresu o odpowiedni? warto??
                 view.move(-delta.x, -delta.y);
                 window.setView(view);
 
-                // zapisanie aktualnej pozycji kursora jako pozycji pocz¹tkowej
+                // zapisanie aktualnej pozycji kursora jako pozycji pocz?tkowej
                 lastPosition = sf::Mouse::getPosition(window);
             }
             if (event.type == sf::Event::MouseWheelScrolled)
