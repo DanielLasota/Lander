@@ -1,15 +1,27 @@
 #include <iostream>
-#include <cmath>
-#include <cstdlib>
 #include <SFML/Graphics.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <sstream>
-#include <iomanip>
+#include <string>
 
 using namespace std;
 using namespace sf;
 
+std::string del0s(double x) //removes unnecessarry zeros after fraction coma, returns string
+{
+    if (x == 0)
+        return "0";
+    string aux = to_string(x);
+    for (int i = aux.length(); i >= 0; i--)
+    {
+        if (aux[i-1] == '0'||aux[i-1] == '.')
+            aux.erase(i-1, 1);
+        else
+            break;
+    }
+    return aux;
+}
 int main()
 {
     double a, b, c, y, x, delta;
@@ -17,12 +29,9 @@ int main()
     const int height = 600;                     
     const int n = 200;                          // n of points on chart
     const float thickness = 2.0f;
-
     cout << "Podaj wspolczynniki a, b i c dla funkcji kwadratowej: ";
     cin >> a >> b >> c;
 
-   
-    
     sf::Font font;
     if (!font.loadFromFile("C:\\Users\\Devxd\\Desktop\\EurostileExtended.ttf")) {
         cout << "Unable to read .ttf file... ";
@@ -49,84 +58,96 @@ int main()
     r = (r == -0.0) ? 0.0 : r;
     v1 = (v1 == -0.0) ? 0.0 : v1;
     v2 = (v2 == -0.0) ? 0.0 : v2;
-    q_vertex = (q_vertex == -0.0) ? 0.0 : q_vertex;
+    q_vertex = (q_vertex == -0.0) ? 0.0 : q_vertex;   
 
-    // Function formulas
 
     //general formVVVVV
     //general formVVVVV
+
     string general_form = "f(x) = ";
-    if (a == 1)                 //a
-        general_form += "x^2";
-    else
-        general_form += to_string(a) + "x^2";
-    
-    if (b == 1)                 //b
-        general_form += " + x";
-    if (b == -1)
-        general_form += " - x";
-    if (b < 0 && b != -1)
-        general_form += " " + to_string(b) + "x";
-    if (b > 1 && b != 1)
-        general_form += " + " + to_string(b) + "x";
-    
-    if(c<0)                     //c
-        general_form += " " + to_string(c);
+    if (a > 0)
+    {
+        if (a == 1)
+            general_form += "x^2 ";
+        else
+            general_form += "+ " + del0s(a) + "x^2 ";
+    }
+    if (a < 0)
+    {
+        if (a == -1)
+            general_form += "-x^2";
+        else
+            general_form += " " + del0s(a) + "x^2 ";
+    }
+    if (b > 0)
+    {
+        if (b == 1)
+            general_form += " + x";
+        else
+            general_form += "+ " + del0s(b) + "x ";
+    }
+    if (b < 0)
+    {
+        if (b == -1)
+            general_form += " - x";
+        else
+            general_form += " " + del0s(b) + "x ";
+    }
     if (c > 0)
-        general_form += " + " + to_string(c);
+        general_form += " + " + del0s(c);
+    else if (c <= 0)
+        general_form += del0s(c);
 
     //Product form VVVVVV
     //Product form VVVVVV
 
     string product_form = "f(x) = ";
 
-    if (delta == 0) {
+    if (delta == 0)
+    {
         if (a == 1) {
-            if (p == 0)
-                product_form += "x^2";
-            else
-                product_form += "(x - " + to_string(p) + ")^2";
+            product_form += "(x^2";
         }
         else {
-            if (p == 0)
-                product_form += to_string(a) + "x^2";
-            else
-                product_form += to_string(a) + "(x - " + to_string(p) + ")^2";
+            product_form += del0s(a) + "(x^2";
         }
 
-    }
-    else if (delta > 0) {
-        if (a == 1)
-            product_form += "(x - " + to_string(x1) + ")(x - " + to_string(x2) + ")";
-        else
-            product_form += to_string(a) + "(x - " + to_string(x1) + ")(x - " + to_string(x2) + ")";
-    }
-    else {
-        if (a == 1)
-            product_form += "(x - " + to_string(p) + ")^2";
-        else
-            product_form += to_string(a) + "(x - " + to_string(p) + ")^2";
+        if (p > 0)
+            product_form += " + " + del0s(p) + " x)^2";
+        else if (p < 0)
+            product_form += del0s(p) + " x)^2";
     }
 
+    else if (delta > 0) {
+        if (a == 1)
+            product_form += "(x - " + del0s(x1) + ")(x - " + del0s(x2) + ")";
+        else
+            product_form += del0s(a) + "(x - " + del0s(x1) + ")(x - " + del0s(x2) + ")";
+    }
+
+    if (delta < 0)
+        product_form = general_form;
+
+    
     //VERTEX FORM VVVVVVVV
     //VERTEX FORM VVVVVVVV
 
     string vertex_form = "f(x) = ";
     if (a == 1) { 
         if (p != 0)
-            vertex_form += "(x - " + to_string(p) + ")^2";
+            vertex_form += "(x - " + del0s(p) + ")^2";
         else
             vertex_form += "x^2";
     }
     else if(a!=1) {
         if(p != 0)
-            vertex_form += to_string(a) + "(x^2 - " + to_string(p) + ")";
+            vertex_form += del0s(a) + "(x^2 - " + del0s(p) + ")";
         else
-            vertex_form += to_string(a) + "x^2";
+            vertex_form += del0s(a) + "x^2";
     }
 
     if (q_vertex != 0)
-        vertex_form += " + " + to_string(q_vertex);
+        vertex_form += " + " + del0s(q_vertex);
 
     std::cout << "General form: " << general_form << std::endl;
     std::cout << "Product form: " << product_form << std::endl;
@@ -184,11 +205,9 @@ int main()
 
     sf::Text axis_ptrs_numbers;
     axis_ptrs_numbers.setFont(font);
-    axis_ptrs_numbers.setCharacterSize(12);
+    axis_ptrs_numbers.setCharacterSize(12.0f);
     axis_ptrs_numbers.setFillColor(sf::Color::Black);
     std::stringstream oss_axis_ptrs_numbers;
-
-
 
     index = 0;
     // Axes numerating protootype ADD HERE CAREFULYYY
@@ -200,12 +219,14 @@ int main()
             grid1x1[index + 1].position = Vector2f(static_cast<float>(width / 2 + i), static_cast<float>(height / 2) + 0.5f);
             grid1x1[index].color = Color(0, 0, 0, 100);
             grid1x1[index + 1].color = Color(0, 0, 0, 100);
-            oss_axis_ptrs_numbers << i/40;
-            
-            axis_ptrs_numbers.setPosition(Vector2f(static_cast<float>(-width / 2 + i), static_cast<float>(height / 2) - 0.5f));
+
+
+            oss_axis_ptrs_numbers << i/40 << "         ";            
+            axis_ptrs_numbers.setPosition(Vector2f(static_cast<float>(-width / 2 + i - 10), static_cast<float>(height / 2) - 0.5f));
             axis_ptrs_numbers.setString(oss_axis_ptrs_numbers.str());
+
+
             index += 2;
-            oss_axis_ptrs_numbers.str("");
         }
     }
     for (int i = -height / 2; i <= height / 2; i++) {
@@ -249,14 +270,15 @@ int main()
     //    cout << "Unable to read .ttf file... ";
     //    // error deal
     //}
+
     sf::Text fdata;
     fdata.setFont(font);
-    fdata.setCharacterSize(10);
+    fdata.setCharacterSize(17);
     fdata.setFillColor(sf::Color::Black);
     std::stringstream oss;
 
     oss << "General form: " << general_form << endl
-        << "Product form: " << product_form << endl
+        << "Product_form: " << product_form << endl
         << "Vertex form: " << vertex_form << endl << endl
         << "Delta: " << delta << endl;
     if (delta == 0)
@@ -327,7 +349,6 @@ int main()
         window.draw(fdata);
 
         window.setView(view);
-
         window.display();
     }
 
