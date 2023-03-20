@@ -46,3 +46,42 @@ while (window.isOpen())
     // Update window
     window.display();
 }
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+// ###################################################
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+// ###################################################
+// XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+// ###################################################
+// Axes numerating protootype
+
+
+// create a new VertexArray to store the grid lines
+VertexArray grid1x1(Lines, (width + height) * 2);
+
+// create a new Text object to display the numbers
+sf::Text numberText("", font, 12);
+numberText.setFillColor(sf::Color::Black);
+numberText.setStyle(sf::Text::Regular);
+numberText.setOrigin(sf::Vector2f(numberText.getGlobalBounds().width / 2.f, numberText.getGlobalBounds().height / 2.f));
+
+// loop through the vertical grid lines
+for (int i = -width / 2; i <= width / 2; i++) {
+    if (i % 4 == 0) {
+        // create a new Text object for this number
+        numberText.setString(std::to_string(i));
+        // set the position and rotation of the number
+        numberText.setPosition(sf::Vector2f(static_cast<float>(width / 2 + i), static_cast<float>(height / 2) + 10.f));
+        numberText.setRotation(90.f);
+        // add the number to the grid VertexArray
+        int index = (i + width / 2) * 2;
+        grid1x1[index].position = sf::Vector2f(static_cast<float>(width / 2 + i), static_cast<float>(height / 2) - 0.5f);
+        grid1x1[index + 1].position = sf::Vector2f(static_cast<float>(width / 2 + i), static_cast<float>(height / 2) + 0.5f);
+        grid1x1[index].color = sf::Color(0, 0, 0, 100);
+        grid1x1[index + 1].color = sf::Color(0, 0, 0, 100);
+        // add the number to the grid VertexArray
+        window.draw(numberText);
+    }
+}
+
+// draw the grid lines and numbers to the window
+window.draw(grid1x1);

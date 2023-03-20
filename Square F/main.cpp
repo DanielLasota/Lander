@@ -22,6 +22,7 @@ int main()
     cin >> a >> b >> c;
 
     RenderWindow window(VideoMode(width, height), "Funkcja kwadratowa", sf::Style::None);
+    
 
     // delta, zeros etc 
     delta = b * b - 4 * a * c;
@@ -142,7 +143,7 @@ int main()
 
     //############################################VV
     //################# GRID #####################VV
-    VertexArray grid(Lines, (width + height) * 2);
+    VertexArray grid/*MESH*/(Lines, (width + height) * 2);
     int index = 0;
     for (int i = -width / 2; i <= width / 2; i++) {
         if (i != 0) {
@@ -162,10 +163,14 @@ int main()
             index += 2;
         }
     }
-    VertexArray grid1x1(Lines, (width + height) * 2);
+    VertexArray grid1x1/*pointers*/(Lines, (width + height) * 2);
     index = 0;
+
+    // Axes numerating protootype ADD HERE CAREFULYYY
+
+
     for (int i = -width / 2; i <= width / 2; i++) {
-        if (i % 10 == 0) {
+        if (i % 40 == 0) {
             grid1x1[index].position = Vector2f(static_cast<float>(width / 2 + i), static_cast<float>(height / 2) - 0.5f);
             grid1x1[index + 1].position = Vector2f(static_cast<float>(width / 2 + i), static_cast<float>(height / 2) + 0.5f);
             grid1x1[index].color = Color(0, 0, 0, 100);
@@ -174,7 +179,7 @@ int main()
         }
     }
     for (int i = -height / 2; i <= height / 2; i++) {
-        if (i % 10 == 0) {
+        if (i % 40 == 0) {
             grid1x1[index].position = Vector2f(static_cast<float>(width / 2) - 0.5f, static_cast<float>(height / 2 + i));
             grid1x1[index + 1].position = Vector2f(static_cast<float>(width / 2) + 0.5f, static_cast<float>(height / 2 + i));
             grid1x1[index].color = Color(0, 0, 0, 100);
@@ -183,7 +188,7 @@ int main()
         }
     }
     //################# GRID #####################^^
-    //############################################^^ 
+    //############################################^^
 
 
 
@@ -278,8 +283,6 @@ int main()
                 }
             }
         }
-
-                                                    //delete to get text fixed to graph
 
         window.clear(Color::White);
         //window.draw(grid);
