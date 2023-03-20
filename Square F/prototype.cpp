@@ -85,3 +85,42 @@ for (int i = -width / 2; i <= width / 2; i++) {
 
 // draw the grid lines and numbers to the window
 window.draw(grid1x1);
+
+//#######################
+//#######################
+//#######################
+
+
+const int step = 40;
+const float font_size = 12.f;
+
+sf::Font font;
+if (!font.loadFromFile("path/to/font.ttf")) {
+    // handle font loading error
+}
+
+// Add labels for OX axis
+for (int i = -width / 2; i <= width / 2; i += step) {
+    if (i % step == 0) {
+        sf::Text label(std::to_string(i), font, font_size);
+        label.setFillColor(sf::Color::Black);
+        label.setPosition(static_cast<float>(width / 2 + i), static_cast<float>(height / 2) + 10.f);
+        label.setOrigin(label.getLocalBounds().width / 2.f, label.getLocalBounds().height / 2.f);
+        // set label origin to its center for proper alignment
+        // adjust position of label to make it appear below the axis
+        window.draw(label);
+    }
+}
+
+// Add labels for OY axis
+for (int i = -height / 2; i <= height / 2; i += step) {
+    if (i % step == 0) {
+        sf::Text label(std::to_string(i), font, font_size);
+        label.setFillColor(sf::Color::Black);
+        label.setPosition(static_cast<float>(width / 2) - 15.f, static_cast<float>(height / 2 + i));
+        label.setOrigin(label.getLocalBounds().width, label.getLocalBounds().height / 2.f);
+        // set label origin to its right edge for proper alignment
+        // adjust position of label to make it appear left to the axis
+        window.draw(label);
+    }
+}

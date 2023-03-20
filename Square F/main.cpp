@@ -21,8 +21,14 @@ int main()
     cout << "Podaj wspolczynniki a, b i c dla funkcji kwadratowej: ";
     cin >> a >> b >> c;
 
-    RenderWindow window(VideoMode(width, height), "Funkcja kwadratowa", sf::Style::None);
+   
     
+    sf::Font font;
+    if (!font.loadFromFile("C:\\Users\\Devxd\\Desktop\\EurostileExtended.ttf")) {
+        cout << "Unable to read .ttf file... ";
+        // error deal
+    }
+
 
     // delta, zeros etc 
     delta = b * b - 4 * a * c;
@@ -131,6 +137,10 @@ int main()
         << "x1= " << x1 << endl << "x2=" << x2 << endl
         << "v1=" << v1 << endl << "v2=" << v2;
     // axes
+
+    RenderWindow window(VideoMode(width, height), "Funkcja kwadratowa", sf::Style::None);
+
+
     VertexArray axes(Lines, 4);
     axes[0].position = Vector2f(static_cast<float>(width / 2), 0.0f);
     axes[1].position = Vector2f(static_cast<float>(width / 2), static_cast<float>(height));
@@ -163,19 +173,39 @@ int main()
             index += 2;
         }
     }
-    VertexArray grid1x1/*pointers*/(Lines, (width + height) * 2);
+
+
+
+    //################# AX PTRS #####################VV
+    //################# AX PTRS #####################VV
+        
+
+    VertexArray grid1x1(Lines, (width + height) * 2); // AXIS POINTERS
+
+    sf::Text axis_ptrs_numbers;
+    axis_ptrs_numbers.setFont(font);
+    axis_ptrs_numbers.setCharacterSize(12);
+    axis_ptrs_numbers.setFillColor(sf::Color::Black);
+    std::stringstream oss_axis_ptrs_numbers;
+
+
+
     index = 0;
-
     // Axes numerating protootype ADD HERE CAREFULYYY
-
 
     for (int i = -width / 2; i <= width / 2; i++) {
         if (i % 40 == 0) {
+
             grid1x1[index].position = Vector2f(static_cast<float>(width / 2 + i), static_cast<float>(height / 2) - 0.5f);
             grid1x1[index + 1].position = Vector2f(static_cast<float>(width / 2 + i), static_cast<float>(height / 2) + 0.5f);
             grid1x1[index].color = Color(0, 0, 0, 100);
             grid1x1[index + 1].color = Color(0, 0, 0, 100);
+            oss_axis_ptrs_numbers << i/40;
+            
+            axis_ptrs_numbers.setPosition(Vector2f(static_cast<float>(-width / 2 + i), static_cast<float>(height / 2) - 0.5f));
+            axis_ptrs_numbers.setString(oss_axis_ptrs_numbers.str());
             index += 2;
+            oss_axis_ptrs_numbers.str("");
         }
     }
     for (int i = -height / 2; i <= height / 2; i++) {
@@ -187,8 +217,8 @@ int main()
             index += 2;
         }
     }
-    //################# GRID #####################^^
-    //############################################^^
+    //################# AX PTRS #####################^^
+    //###############################################^^
 
 
 
@@ -207,18 +237,18 @@ int main()
     //############### F Graph ####################^^
     //############################################^^
 
-    View view(FloatRect(0, 0, width, height));  //warstwa "view"
+    View view(FloatRect(0, 0, width, height));  //main layer with moveable & zoomable graph
     window.setView(view);
 
     //############################################VV
     //################# text #####################VV
-    sf::View textView(sf::FloatRect(0, 0, width, height)); // osobna warstwa dla tekstu
+    sf::View textView(sf::FloatRect(0, 0, width, height)); // data text layer
 
-    sf::Font font;
-    if (!font.loadFromFile("C:\\Users\\Devxd\\Desktop\\EurostileExtended.ttf")) {
-        cout << "Unable to read .ttf file... ";
-        // error deal
-    }
+    //sf::Font font;
+    //if (!font.loadFromFile("C:\\Users\\Devxd\\Desktop\\EurostileExtended.ttf")) {
+    //    cout << "Unable to read .ttf file... ";
+    //    // error deal
+    //}
     sf::Text fdata;
     fdata.setFont(font);
     fdata.setCharacterSize(10);
@@ -288,6 +318,7 @@ int main()
         //window.draw(grid);
         window.draw(grid1x1);
         window.draw(axes);
+        window.draw(axis_ptrs_numbers);
         window.draw(plot);
 
         window.setView(textView);
