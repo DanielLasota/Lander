@@ -13,9 +13,9 @@ using namespace sf;
 int main()
 {
     double a, b, c, y, x, delta;
-    const int width = 800;                      // szeroko?? okna graficznego
-    const int height = 600;                     // wysoko?? okna graficznego
-    const int n = 200;                          // liczba punktów na wykresie
+    const int width = 800;                      
+    const int height = 600;                     
+    const int n = 200;                          // n of points on chart
     const float thickness = 2.0f;
 
     cout << "Podaj wspolczynniki a, b i c dla funkcji kwadratowej: ";
@@ -49,12 +49,12 @@ int main()
     //general formVVVVV
     //general formVVVVV
     string general_form = "f(x) = ";
-    if (a == 1)//a
+    if (a == 1)                 //a
         general_form += "x^2";
     else
         general_form += to_string(a) + "x^2";
     
-    if (b == 1)//b
+    if (b == 1)                 //b
         general_form += " + x";
     if (b == -1)
         general_form += " - x";
@@ -63,7 +63,7 @@ int main()
     if (b > 1 && b != 1)
         general_form += " + " + to_string(b) + "x";
     
-    if(c<0)//c
+    if(c<0)                     //c
         general_form += " " + to_string(c);
     if (c > 0)
         general_form += " + " + to_string(c);
@@ -193,7 +193,7 @@ int main()
     //############### F Graph ####################VV
     VertexArray plot(LineStrip, n);
     for (int i = 0; i < n; i++)
-    {
+    {   
         x = static_cast<float>(i - n / 2) / static_cast<float>(n) * 20.0f;
         y = a * x * x + b * x + c;
         plot[i].position = Vector2f(x * static_cast<float>(width) / 20.0f + static_cast<float>(width / 2), -y * static_cast<float>(height) / 20.0f + static_cast<float>(height / 2));
@@ -202,21 +202,22 @@ int main()
     //############### F Graph ####################^^
     //############################################^^
 
-    // coursor initialize
-    View view(FloatRect(0, 0, width, height));
+    View view(FloatRect(0, 0, width, height));  //warstwa "view"
     window.setView(view);
 
     //############################################VV
     //################# text #####################VV
+    sf::View textView(sf::FloatRect(0, 0, width, height)); // osobna warstwa dla tekstu
+
     sf::Font font;
     if (!font.loadFromFile("C:\\Users\\Devxd\\Desktop\\EurostileExtended.ttf")) {
         cout << "Unable to read .ttf file... ";
         // error deal
     }
-    sf::Text zeros;
-    zeros.setFont(font);
-    zeros.setCharacterSize(25);
-    zeros.setFillColor(sf::Color::Black);
+    sf::Text fdata;
+    fdata.setFont(font);
+    fdata.setCharacterSize(10);
+    fdata.setFillColor(sf::Color::Black);
     std::stringstream oss;
 
     oss << "General form: " << general_form << endl
@@ -229,17 +230,14 @@ int main()
         oss << "First zero: " << x1 << ", Second zero: " << x2 << endl << endl;
     else
         oss << "Function has no zeros..." << endl << endl;
-
     oss << "Vieta's formulas: " << endl << "x1 + x2 = " << v1 << endl << "x1 * x2 = " << v2 << endl << endl
         << "Vertex coordinates V(p,q) = (" << p << "," << q_vertex << ")"
         << endl << endl;
-
-
  
-        
-    zeros.setString(oss.str());
-    zeros.setPosition(-500, 0);
-    //window.draw(zeros); // narysowanie tekstu na ekranie
+    fdata.setString(oss.str());
+
+
+    //zeros.setPosition(-500, 0); // uncomment to get text fixed to graph
 
     //################# text #####################^^
     //############################################^^
@@ -248,31 +246,27 @@ int main()
     bool isDragging = false;
     sf::Vector2i lastPosition;
 
-
     while (window.isOpen())
     {
         sf::Event event;
         while (window.pollEvent(event))
         {
-            // obs?uga zamkni?cia okna
             if (event.type == sf::Event::Closed)
                 window.close();
-            // obs?uga przesuwania wykresu myszk?
+            //graph move service
             else if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
             {
-                // zapisanie pozycji kursora w momencie naci?ni?cia przycisku myszy
                 lastPosition = sf::Mouse::getPosition(window);
             }
             else if (event.type == sf::Event::MouseMoved && sf::Mouse::isButtonPressed(sf::Mouse::Left))
             {
-                // wyznaczenie ró?nicy pomi?dzy aktualn? pozycj? kursora a pozycj? pocz?tkow?
+                // actual & last coursor position difference
                 sf::Vector2i delta = sf::Mouse::getPosition(window) - lastPosition;
 
-                // przesuni?cie wykresu o odpowiedni? warto??
+                // graph move
                 view.move(-delta.x, -delta.y);
                 window.setView(view);
 
-                // zapisanie aktualnej pozycji kursora jako pozycji pocz?tkowej
                 lastPosition = sf::Mouse::getPosition(window);
             }
             if (event.type == sf::Event::MouseWheelScrolled)
@@ -284,12 +278,21 @@ int main()
                 }
             }
         }
+
+                                                    //delete to get text fixed to graph
+
         window.clear(Color::White);
         //window.draw(grid);
         window.draw(grid1x1);
         window.draw(axes);
         window.draw(plot);
-        window.draw(zeros);
+
+        window.setView(textView);
+        sf::Vector2f textPosition = window.mapPixelToCoords(sf::Vector2i(20, 20));     //delete to get text fixed to graph
+        fdata.setPosition(textPosition);
+        window.draw(fdata);
+        window.setView(view);
+
         window.display();
     }
 
