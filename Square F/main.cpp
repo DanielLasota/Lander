@@ -291,6 +291,7 @@ int main()
         sf::Vector2f textPosition = window.mapPixelToCoords(sf::Vector2i(20, 20));     //delete to get text fixed to graph
         fdata.setPosition(textPosition);
         window.draw(fdata);
+
         window.setView(view);
 
         window.display();
