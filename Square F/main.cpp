@@ -63,7 +63,6 @@ int main()
 
     //general formVVVVV
     //general formVVVVV
-
     string general_form = "f(x) = ";
     if (a > 0)
     {
@@ -97,12 +96,9 @@ int main()
         general_form += " + " + del0s(c);
     else if (c <= 0)
         general_form += del0s(c);
-
     //Product form VVVVVV
     //Product form VVVVVV
-
     string product_form = "f(x) = ";
-
     if (delta == 0)
     {
         if (a == 1) {
@@ -117,21 +113,16 @@ int main()
         else if (p < 0)
             product_form += del0s(p) + " x)^2";
     }
-
     else if (delta > 0) {
         if (a == 1)
             product_form += "(x - " + del0s(x1) + ")(x - " + del0s(x2) + ")";
         else
             product_form += del0s(a) + "(x - " + del0s(x1) + ")(x - " + del0s(x2) + ")";
     }
-
     if (delta < 0)
         product_form = general_form;
-
-    
     //VERTEX FORM VVVVVVVV
     //VERTEX FORM VVVVVVVV
-
     string vertex_form = "f(x) = ";
     if (a == 1) { 
         if (p != 0)
@@ -145,22 +136,16 @@ int main()
         else
             vertex_form += del0s(a) + "x^2";
     }
-
     if (q_vertex != 0)
         vertex_form += " + " + del0s(q_vertex);
-
-    std::cout << "General form: " << general_form << std::endl;
-    std::cout << "Product form: " << product_form << std::endl;
-    std::cout << "Vertex form: " << vertex_form << std::endl;
     //console chech-out
     cout << "a=" << a << endl << "b=" << b << endl << "c=" << c << endl
         << "p= " << p << endl << "q=" << q << endl << "r= " << r << endl
         << "x1= " << x1 << endl << "x2=" << x2 << endl
         << "v1=" << v1 << endl << "v2=" << v2;
-    // axes
+
 
     RenderWindow window(VideoMode(width, height), "Funkcja kwadratowa", sf::Style::None);
-
 
     VertexArray axes(Lines, 4);
     axes[0].position = Vector2f(static_cast<float>(width / 2), 0.0f);
@@ -171,7 +156,6 @@ int main()
     axes[1].color = Color::Black;
     axes[2].color = Color::Black;
     axes[3].color = Color::Black;
-
     //############################################VV
     //################# GRID #####################VV
     VertexArray grid/*MESH*/(Lines, (width + height) * 2);
@@ -194,24 +178,15 @@ int main()
             index += 2;
         }
     }
-
-
-
     //################# AX PTRS #####################VV
     //################# AX PTRS #####################VV
-        
-
     VertexArray grid1x1(Lines, (width + height) * 2); // AXIS POINTERS
-
     sf::Text axis_ptrs_numbers;
     axis_ptrs_numbers.setFont(font);
     axis_ptrs_numbers.setCharacterSize(12.0f);
     axis_ptrs_numbers.setFillColor(sf::Color::Black);
     std::stringstream oss_axis_ptrs_numbers;
-
     index = 0;
-    // Axes numerating protootype ADD HERE CAREFULYYY
-
     for (int i = -width / 2; i <= width / 2; i++) {
         if (i % 40 == 0) {
 
@@ -219,13 +194,9 @@ int main()
             grid1x1[index + 1].position = Vector2f(static_cast<float>(width / 2 + i), static_cast<float>(height / 2) + 0.5f);
             grid1x1[index].color = Color(0, 0, 0, 100);
             grid1x1[index + 1].color = Color(0, 0, 0, 100);
-
-
             oss_axis_ptrs_numbers << i/40 << "         ";            
             axis_ptrs_numbers.setPosition(Vector2f(static_cast<float>(-width / 2 + i - 10), static_cast<float>(height / 2) - 0.5f));
             axis_ptrs_numbers.setString(oss_axis_ptrs_numbers.str());
-
-
             index += 2;
         }
     }
@@ -240,11 +211,7 @@ int main()
     }
     //################# AX PTRS #####################^^
     //###############################################^^
-
-
-
-
-
+    // 
     //############################################VV
     //############### F Graph ####################VV
     VertexArray plot(LineStrip, n);
@@ -264,19 +231,11 @@ int main()
     //############################################VV
     //################# text #####################VV
     sf::View textView(sf::FloatRect(0, 0, width, height)); // data text layer
-
-    //sf::Font font;
-    //if (!font.loadFromFile("C:\\Users\\Devxd\\Desktop\\EurostileExtended.ttf")) {
-    //    cout << "Unable to read .ttf file... ";
-    //    // error deal
-    //}
-
     sf::Text fdata;
     fdata.setFont(font);
     fdata.setCharacterSize(17);
     fdata.setFillColor(sf::Color::Black);
     std::stringstream oss;
-
     oss << "General form: " << general_form << endl
         << "Product_form: " << product_form << endl
         << "Vertex form: " << vertex_form << endl << endl
@@ -290,12 +249,7 @@ int main()
     oss << "Vieta's formulas: " << endl << "x1 + x2 = " << v1 << endl << "x1 * x2 = " << v2 << endl << endl
         << "Vertex coordinates V(p,q) = (" << p << "," << q_vertex << ")"
         << endl << endl;
- 
     fdata.setString(oss.str());
-
-
-    //zeros.setPosition(-500, 0); // uncomment to get text fixed to graph
-
     //################# text #####################^^
     //############################################^^
 
@@ -319,11 +273,9 @@ int main()
             {
                 // actual & last coursor position difference
                 sf::Vector2i delta = sf::Mouse::getPosition(window) - lastPosition;
-
                 // graph move
                 view.move(-delta.x, -delta.y);
                 window.setView(view);
-
                 lastPosition = sf::Mouse::getPosition(window);
             }
             if (event.type == sf::Event::MouseWheelScrolled)
