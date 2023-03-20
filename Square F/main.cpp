@@ -22,6 +22,112 @@ std::string del0s(double x) //removes unnecessarry zeros after fraction coma, re
     }
     return aux;
 }
+
+std::string generalf(double a, double b, double c){
+
+    string general_form = " f(x) = ";
+    if (a > 0)
+    {
+        if (a == 1)
+            general_form += "x^2 ";
+        else
+            general_form += "+ " + del0s(a) + "x^2 ";
+    }
+    if (a < 0)
+    {
+        if (a == -1)
+            general_form += "-x^2";
+        else
+            general_form += " " + del0s(a) + "x^2 ";
+    }
+    if (b > 0)
+    {
+        if (b == 1)
+            general_form += " + x";
+        else
+            general_form += "+ " + del0s(b) + "x ";
+    }
+    if (b < 0)
+    {
+        if (b == -1)
+            general_form += " - x";
+        else
+            general_form += " " + del0s(b) + "x ";
+    }
+    if (c > 0)
+        general_form += " + " + del0s(c);
+    else if (c <= 0)
+        general_form += del0s(c);
+
+    return general_form;
+}
+
+std::string productf(double a, double b, double c) {
+
+    string product_form = "f(x) = ";
+    double delta = b * b - 4 * a * c;
+    double x1 = (-b - sqrt(delta)) / (2 * a);
+    double x2 = (-b + sqrt(delta)) / (2 * a);
+    double p = -b / (2.0 * a);
+
+    x1 = (x1 == -0.0) ? 0.0 : x1;
+    x2 = (x2 == -0.0) ? 0.0 : x2;
+    p = (p == -0.0) ? 0.0 : p;
+
+
+    if (delta == 0){
+        if (a == 1){
+            product_form += "(x^2";
+        }
+        else {
+            product_form += del0s(a) + "(x^2";
+        }
+        if (p > 0)
+            product_form += " + " + del0s(p) + " x)^2";
+        else if (p < 0)
+            product_form += del0s(p) + " x)^2";
+    }
+    else if (delta > 0) {
+        if (a == 1)
+            product_form += "(x - " + del0s(x1) + ")(x - " + del0s(x2) + ")";
+        else
+            product_form += del0s(a) + "(x - " + del0s(x1) + ")(x - " + del0s(x2) + ")";
+    }
+    else
+        return generalf(a, b, c);
+
+    return product_form;
+}
+
+std::string vertexf(double a, double b, double c) {
+
+    string vertex_form = "f(x) = ";
+    double delta = b * b - 4 * a * c;
+    double q_vertex = -(delta) / (4 * a);
+    double p = -b / (2.0 * a);
+
+    delta = (delta == -0.0) ? 0.0 : delta;
+    q_vertex = (q_vertex == -0.0) ? 0.0 : q_vertex;
+    p = (p == -0.0) ? 0.0 : p;
+
+    if (a == 1) {
+        if (p != 0)
+            vertex_form += "(x - " + del0s(p) + ")^2";
+        else
+            vertex_form += "x^2";
+    }
+    else if (a != 1) {
+        if (p != 0)
+            vertex_form += del0s(a) + "(x^2 - " + del0s(p) + ")";
+        else
+            vertex_form += del0s(a) + "x^2";
+    }
+    if (q_vertex != 0)
+        vertex_form += " + " + del0s(q_vertex);
+
+    return vertex_form;
+}
+
 int main()
 {
     double a, b, c, y, x, delta;
@@ -58,87 +164,9 @@ int main()
     r = (r == -0.0) ? 0.0 : r;
     v1 = (v1 == -0.0) ? 0.0 : v1;
     v2 = (v2 == -0.0) ? 0.0 : v2;
-    q_vertex = (q_vertex == -0.0) ? 0.0 : q_vertex;   
+    q_vertex = (q_vertex == -0.0) ? 0.0 : q_vertex;
 
-
-    //general formVVVVV
-    //general formVVVVV
-    string general_form = "f(x) = ";
-    if (a > 0)
-    {
-        if (a == 1)
-            general_form += "x^2 ";
-        else
-            general_form += "+ " + del0s(a) + "x^2 ";
-    }
-    if (a < 0)
-    {
-        if (a == -1)
-            general_form += "-x^2";
-        else
-            general_form += " " + del0s(a) + "x^2 ";
-    }
-    if (b > 0)
-    {
-        if (b == 1)
-            general_form += " + x";
-        else
-            general_form += "+ " + del0s(b) + "x ";
-    }
-    if (b < 0)
-    {
-        if (b == -1)
-            general_form += " - x";
-        else
-            general_form += " " + del0s(b) + "x ";
-    }
-    if (c > 0)
-        general_form += " + " + del0s(c);
-    else if (c <= 0)
-        general_form += del0s(c);
-    //Product form VVVVVV
-    //Product form VVVVVV
-    string product_form = "f(x) = ";
-    if (delta == 0)
-    {
-        if (a == 1) {
-            product_form += "(x^2";
-        }
-        else {
-            product_form += del0s(a) + "(x^2";
-        }
-
-        if (p > 0)
-            product_form += " + " + del0s(p) + " x)^2";
-        else if (p < 0)
-            product_form += del0s(p) + " x)^2";
-    }
-    else if (delta > 0) {
-        if (a == 1)
-            product_form += "(x - " + del0s(x1) + ")(x - " + del0s(x2) + ")";
-        else
-            product_form += del0s(a) + "(x - " + del0s(x1) + ")(x - " + del0s(x2) + ")";
-    }
-    if (delta < 0)
-        product_form = general_form;
-    //VERTEX FORM VVVVVVVV
-    //VERTEX FORM VVVVVVVV
-    string vertex_form = "f(x) = ";
-    if (a == 1) { 
-        if (p != 0)
-            vertex_form += "(x - " + del0s(p) + ")^2";
-        else
-            vertex_form += "x^2";
-    }
-    else if(a!=1) {
-        if(p != 0)
-            vertex_form += del0s(a) + "(x^2 - " + del0s(p) + ")";
-        else
-            vertex_form += del0s(a) + "x^2";
-    }
-    if (q_vertex != 0)
-        vertex_form += " + " + del0s(q_vertex);
-    //console chech-out
+    //just a console chech-out
     cout << "a=" << a << endl << "b=" << b << endl << "c=" << c << endl
         << "p= " << p << endl << "q=" << q << endl << "r= " << r << endl
         << "x1= " << x1 << endl << "x2=" << x2 << endl
@@ -236,9 +264,9 @@ int main()
     fdata.setCharacterSize(17);
     fdata.setFillColor(sf::Color::Black);
     std::stringstream oss;
-    oss << "General form: " << general_form << endl
-        << "Product_form: " << product_form << endl
-        << "Vertex form: " << vertex_form << endl << endl
+    oss << "General form: " << generalf(a, b, c) << endl
+        << "Product_form: " << productf(a, b, c) << endl
+        << "Vertex form: " << vertexf(a, b, c) << endl << endl
         << "Delta: " << delta << endl;
     if (delta == 0)
         oss << "Function' zero: " << p << endl << endl;
