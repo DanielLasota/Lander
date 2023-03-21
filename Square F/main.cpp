@@ -130,10 +130,10 @@ std::string vertexf(double a, double b, double c) {
 
 int main()
 {
-    double a, b, c, y, x, delta;
+    double a, b, c, y, x, fdelta;
     const int width = 800;                      
-    const int height = 600;                     
-    const int n = 200;                          // n of points on chart
+    const int height = 800;                     
+    const int n = 400;                          // n of points on chart
     const float thickness = 2.0f;
     cout << "Podaj wspolczynniki a, b i c dla funkcji kwadratowej: ";
     cin >> a >> b >> c;
@@ -146,17 +146,17 @@ int main()
 
 
     // delta, zeros etc 
-    delta = b * b - 4 * a * c;
-    double x1 = (-b - sqrt(delta)) / (2 * a);
-    double x2 = (-b + sqrt(delta)) / (2 * a);
+    fdelta = b * b - 4 * a * c;
+    double x1 = (-b - sqrt(fdelta)) / (2 * a);
+    double x2 = (-b + sqrt(fdelta)) / (2 * a);
     double v1 = -b / a;
     double v2 = c / a;
     double p = -b / (2.0 * a);
     double q = a * p * p + b * p + c;
     double r = a * (p + 1.0 / (4.0 * a)) * (p + 1.0 / (4.0 * a)) + q - 1.0 / (4.0 * a);
-    double q_vertex = -(delta) / (4 * a);
+    double q_vertex = -(fdelta) / (4 * a);
 
-    delta = (delta == -0.0) ? 0.0 : delta;
+    fdelta = (fdelta == -0.0) ? 0.0 : fdelta;
     x1 = (x1 == -0.0) ? 0.0 : x1;
     x2 = (x2 == -0.0) ? 0.0 : x2;
     p = (p == -0.0) ? 0.0 : p;
@@ -209,11 +209,11 @@ int main()
     //################# AX PTRS #####################VV
     //################# AX PTRS #####################VV
     VertexArray grid1x1(Lines, (width + height) * 2); // AXIS POINTERS
-    sf::Text axis_ptrs_numbers;
-    axis_ptrs_numbers.setFont(font);
-    axis_ptrs_numbers.setCharacterSize(12.0f);
-    axis_ptrs_numbers.setFillColor(sf::Color::Black);
-    std::stringstream oss_axis_ptrs_numbers;
+    //sf::Text axis_ptrs_numbers;
+    //axis_ptrs_numbers.setFont(font);
+    //axis_ptrs_numbers.setCharacterSize(12.0f);
+    //axis_ptrs_numbers.setFillColor(sf::Color::Black);
+    //std::stringstream oss_axis_ptrs_numbers;
     index = 0;
     for (int i = -width / 2; i <= width / 2; i++) {
         if (i % 40 == 0) {
@@ -222,9 +222,9 @@ int main()
             grid1x1[index + 1].position = Vector2f(static_cast<float>(width / 2 + i), static_cast<float>(height / 2) + 0.5f);
             grid1x1[index].color = Color(0, 0, 0, 100);
             grid1x1[index + 1].color = Color(0, 0, 0, 100);
-            oss_axis_ptrs_numbers << i/40 << "         ";            
-            axis_ptrs_numbers.setPosition(Vector2f(static_cast<float>(-width / 2 + i - 10), static_cast<float>(height / 2) - 0.5f));
-            axis_ptrs_numbers.setString(oss_axis_ptrs_numbers.str());
+            //oss_axis_ptrs_numbers << i/40 << "         ";
+            //axis_ptrs_numbers.setPosition(Vector2f(static_cast<float>(-width / 2 + i - 10), static_cast<float>(height / 2) - 0.5f));
+            //axis_ptrs_numbers.setString(oss_axis_ptrs_numbers.str());
             index += 2;
         }
     }
@@ -239,7 +239,6 @@ int main()
     }
     //################# AX PTRS #####################^^
     //###############################################^^
-    // 
     //############################################VV
     //############### F Graph ####################VV
     VertexArray plot(LineStrip, n);
@@ -267,16 +266,17 @@ int main()
     oss << "General form: " << generalf(a, b, c) << endl
         << "Product_form: " << productf(a, b, c) << endl
         << "Vertex form: " << vertexf(a, b, c) << endl << endl
-        << "Delta: " << delta << endl;
-    if (delta == 0)
+        << "Delta: " << fdelta << endl;
+    if (fdelta == 0)
         oss << "Function' zero: " << p << endl << endl;
-    else if (delta > 0)
+    else if (fdelta > 0)
         oss << "First zero: " << x1 << ", Second zero: " << x2 << endl << endl;
     else
         oss << "Function has no zeros..." << endl << endl;
     oss << "Vieta's formulas: " << endl << "x1 + x2 = " << v1 << endl << "x1 * x2 = " << v2 << endl << endl
         << "Vertex coordinates V(p,q) = (" << p << "," << q_vertex << ")"
         << endl << endl;
+
     fdata.setString(oss.str());
     //################# text #####################^^
     //############################################^^
@@ -320,7 +320,7 @@ int main()
         //window.draw(grid);
         window.draw(grid1x1);
         window.draw(axes);
-        window.draw(axis_ptrs_numbers);
+        //window.draw(axis_ptrs_numbers);
         window.draw(plot);
 
         window.setView(textView);
