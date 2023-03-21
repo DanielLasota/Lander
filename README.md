@@ -12,22 +12,34 @@ analyses:
 
 -Delta
 -Zeros of function
+
 -Viete
+
 -OX & OY intersection
+
 -Vertex coordinates
+
 -derivatives
 
 
 To do: 
 -interactive points while coursor on the plot - shows off coordinates
+
 -infinite chart -generated while movin left etc
+
 -auto solvin quadratic equations
+
 -nice enter data menu
+
 -matrix fadeout when counting function
 
 -linux port
+
 -Android port
+
 -optimization
+
 -optimization
+
 -optimoization
 
