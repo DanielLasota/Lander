@@ -24,4 +24,12 @@
       <Filter>Pliki zasobów</Filter>
     </Font>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="f_formulas.h">
+      <Filter>Pliki źródłowe</Filter>
+    </ClInclude>
+    <ClInclude Include="f_formulas.hpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>

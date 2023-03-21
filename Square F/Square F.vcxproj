@@ -144,6 +144,10 @@
   <ItemGroup>
     <Font Include="..\..\..\..\Desktop\EurostileExtended.ttf" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="f_formulas.h" />
+    <ClInclude Include="f_formulas.hpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
