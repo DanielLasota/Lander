@@ -2,7 +2,8 @@
 10x times faster than opening symbolab or loging in on smartphone.
 
 
-![alt text](https://user-images.githubusercontent.com/127039319/226502235-5db52800-df9b-4e06-95e7-cbac0d9aa87e.png)
+![alt text]![lander](https://user-images.githubusercontent.com/127039319/226602746-5b48a9bc-5c6f-4272-90dd-1079cdaebb0d.png)
+
 
 
 analyses:
