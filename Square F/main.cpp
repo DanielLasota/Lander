@@ -5,6 +5,7 @@
 #include <sstream>
 #include <string>
 #include "f_formulas.hpp"
+#include <conio.h>
 
 using namespace std;
 using namespace sf;
@@ -13,19 +14,26 @@ using namespace sf;
 int main()
 {
     double a, b, c, y, x, fdelta;
-    const int width = 1200;                      
-    const int height = 900;                     
+    const int width = 800;                      
+    const int height = 800;                     
     const int n = 400;                          // n of points on chart
     const float thickness = 2.0f;
+    //cout << "Podaj wspolczynniki a, b i c dla funkcji kwadratowej: ";
     cout << "Podaj wspolczynniki a, b i c dla funkcji kwadratowej: ";
-    cin >> a >> b >> c;
-
-    sf::Font font;
-    if (!font.loadFromFile("C:\\Users\\Devxd\\Desktop\\EurostileExtended.ttf")) {
-        cout << "Unable to read .ttf file... ";
-        // error deal
+    
+    if (!(cin >> a >> b >> c))
+    {
+        cout << "Niepoprawne Dane..." << endl;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        return 1;
     }
 
+    sf::Font font;
+    if (!font.loadFromFile("EurostileExtended.ttf")) {
+        cout << ".ttf font file not found... ";
+        // error deal
+    }
 
     // delta, zeros etc 
     fdelta = b * b - 4 * a * c;
@@ -49,6 +57,7 @@ int main()
     q_vertex = (q_vertex == -0.0) ? 0.0 : q_vertex;
 
     //just a console chech-out
+    cout << "#########Console Checkout#########" << endl;
     cout << "a=" << a << endl << "b=" << b << endl << "c=" << c << endl
         << "p= " << p << endl << "q=" << q << endl << "r= " << r << endl
         << "x1= " << x1 << endl << "x2=" << x2 << endl

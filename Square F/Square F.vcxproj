@@ -143,6 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <Font Include="..\..\..\..\Desktop\EurostileExtended.ttf" />
+    <Font Include="EurostileExtended.ttf" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="f_formulas.h" />

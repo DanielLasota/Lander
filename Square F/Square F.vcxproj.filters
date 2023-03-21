@@ -23,6 +23,9 @@
     <Font Include="..\..\..\..\Desktop\EurostileExtended.ttf">
       <Filter>Pliki zasobów</Filter>
     </Font>
+    <Font Include="EurostileExtended.ttf">
+      <Filter>Pliki źródłowe</Filter>
+    </Font>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="f_formulas.h">
